@@ -6,6 +6,7 @@ import face_recognition
 
 from recognize import identify_faces
 from emotions import predict_emotions
+from stats import to_html
 
 # 1. Run video capture webcam.
 # 2. Extract frame.
@@ -56,6 +57,8 @@ def main():
       face_locations, face_names = identify_faces(small_frame, known_face_names, known_face_encodings)
       emotions = predict_emotions(face_locations, face_names, small_frame)
 
+      # ("employee_name" : [{"angry":, ..., "time": 123}])
+
       curr_time = millis_time()
       for name in emotions.keys():
         emotions[name]['time'] = curr_time
@@ -86,6 +89,10 @@ def main():
 
     if cv2.waitKey(1) & 0xFF == ord('q'):  # press q to quit
       break
+
+  print(emotion_records)
+
+  to_html(emotion_records)
 
   cap.release()
   cv2.destroyAllWindows()
